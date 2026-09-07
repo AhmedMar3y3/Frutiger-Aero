@@ -1,5 +1,3 @@
-// Let Vite's native worker handles finish closing before the CLI exits on Windows.
-// Keep the CLI's exit status intact, including all build failures.
 const exit = process.exit.bind(process);
 if (process.platform === 'win32') {
   process.exit = (code) => {
