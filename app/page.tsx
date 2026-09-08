@@ -1,4 +1,6 @@
 'use client';
+/* oxlint-disable jsx-a11y/media-has-caption -- Instrumental music; the track title is displayed in the player. */
+/* oxlint-disable next/no-img-element -- Transparent decorative fish sprites use their original alpha-channel asset. */
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { ArrowDown, ArrowUpRight, AudioLines, CloudSun, Fish, Globe2, Headphones, Maximize2, Minimize2, Moon, Pause, Play, Sparkles, Volume2, Waves } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -25,7 +27,8 @@ export default function Home() {
   const audioBusy = useRef(false);
   const fullscreenBusy = useRef(false);
   useEffect(() => {
-    setMotion(!matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const frame = requestAnimationFrame(() => setMotion(!matchMedia('(prefers-reduced-motion: reduce)').matches));
+    return () => cancelAnimationFrame(frame);
   }, []);
   useEffect(() => {
     if (audio.current) audio.current.volume = volume / 100;
@@ -71,7 +74,7 @@ export default function Home() {
         <div className="glass-orb orb-one" /><div className="glass-orb orb-two" />
       </div>
       <header className="site-header chrome">
-        <a href="#" className="brand" aria-label="Aero home"><span className="brand-orb"><Globe2 size={24} strokeWidth={1.3} /></span>aero<span className="brand-period">.</span></a>
+        <a href="#experience" className="brand" aria-label="Aero home"><span className="brand-orb"><Globe2 size={24} strokeWidth={1.3} /></span>aero<span className="brand-period">.</span></a>
         <nav className="nav-glass" aria-label="Main navigation"><a href="#experience" className="nav-active">The experience</a><button onClick={() => setAbout(true)}>The aesthetic <ArrowUpRight size={13} /></button></nav>
         <button className={`sound-toggle glass ${playing ? 'is-playing' : ''}`} onClick={toggleAudio}><AudioLines size={17} /><span>Sound {playing ? 'on' : 'off'}</span><span className="status-dot" /></button>
       </header>
@@ -81,7 +84,7 @@ export default function Home() {
           <h1>The future<br />we <span>dreamed of.</span></h1>
           <p>Clear skies. A quieter mind. A world that feels<br className="desktop-break" /> like a memory you haven’t made yet.</p>
           <div className="hero-actions"><button className="enter-button" onClick={enterFullscreen}><Sparkles size={18} /> Stay here a while <Maximize2 size={18} /></button><span className="headphone-note"><Headphones size={16} /> Best with headphones</span></div>
-          {fullscreenError && <p className="fullscreen-error" role="status">{fullscreenError}</p>}
+          {fullscreenError && <output className="fullscreen-error">{fullscreenError}</output>}
         </div>
         <div className="world-marker chrome"><span className="tiny-cross">+</span><div>YOU ARE SOMEWHERE BETTER<span>{world === 2 ? '02:07 AM · UNDER THE SAME MOON' : '25° · ALWAYS A LITTLE SUNNY'}</span></div></div>
         <div className="vertical-note chrome">BREATHE IN. FLOAT ON. <span>↓</span></div>
